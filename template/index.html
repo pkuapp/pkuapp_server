@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+</head>
+<body>
+<img src="/Server/media/{{res}}"/>
+<form action="/Server/login" method="post">
+验证码<input type="text" name="check"/>
+学号<input type="text" name="sno"/>
+密码<input type="password" name="pwd"/>
+<input type="hidden" name="sid" value="{{sid}}"/>
+<input type="submit"/>
+</form>
+<br>
+<img src="/Server/media/elective.gif"/>
+<form action="/Server/login_portal" method="post">
+验证码<input type="text" name="valid"/>
+学号<input type="text" name="username"/>
+密码<input type="password" name="passwd"/>
+<input type="hidden" name="sessionid" value="{{portal_sid}}"/>
+<input type="submit"/>
+</form>
+
+
+
+<!---->
+ <form action="/Server/classroom/json" method="post" name="form"> 
+     <input type='text' name='c'/>
+ 
+    教学楼：
+    <select name="building"> 
+      
+      <option value="1"  selected="selected">一教</option> 
+      <option value="2">二教</option> 
+      <option value="3">三教</option> 
+      <option value="4">四教</option> 
+      <option value="5">文史</option> 
+      <option value="6">电教</option> 
+      <option value="7">哲学</option> 
+      <option value="8">物理</option> 
+      <option value="9">地学</option> 
+      <option value="10">技物</option> 
+      <option value="11">外文</option> 
+      <option value="12">体教</option> 
+      <option value="13">数学</option> 
+      <option value="14">化学</option> 
+      <option value="15">电子</option> 
+      <option value="16">理教</option> 
+      <option value="17">电教听力</option> 
+      <option value="18">国关</option> 
+      <option value="19">政管</option> 
+      <option value="20">光华</option> 
+	  <option value="99">全部</option> 
+    </select> 
+    时间：
+    <select name="day"> 
+      <option value="1" >周一</option> 
+      <option value="2" >周二</option> 
+      <option value="3" >周三</option> 
+      <option value="4" >周四</option> 
+      <option value="5" >周五</option> 
+      <option value="6" selected>周六</option> 
+      <option value="7" >周日</option> 
+	   <option value="99" >全部</option> 
+    </select> 
+    <input type="submit" name="btn" value="查询"/> 
+    <br/> 
+  </form> 
+  <a href="/Server/account/profile">my profile</a></br><a href="/Server/account/jsonmycourse">my courses</a>
+  </br><a href="/Server/account/notice">my notice</a>
+  <p>read</p>
+ <form action='/Server/account/notice' method="post" name="form2">
+ <input name='id' type='text'></input>
+ <input type='submit'></input>
+ </form>
+ <p>反馈入口</p>
+ <form action='/Server/classroom/feedback/' method="post" name="form2">
+ <input name='keyid' type='text'></input>
+ <input name='feedback' type='text'></input>
+ <input type='submit'></input>
+ </form>
+ <p>发表主题</p>
+ <form action='/Server/course/comment/' method="post" name="form3"> 
+ <input name='id' type='text'></input>
+ <input name='content' type='text'></input>
+ <input type='submit'></input>
+ </form>
+ <p>查询主题</p>
+ <form action='/Server/course/comment/detail' method="post" name="form3"> 
+ <input name='id' type='text'></input>
+ <input type='submit'></input>
+ </form>
+  <p>回复入口</p>
+  <form action='/Server/course/reply' method="post" name="form3"> 
+ 主题id<input name='id' type='text'></input>
+用户对象 <input name='uid' type='text'></input>
+ 内容<input name='content' type='text'></input>
+ <input type='submit'></input>
+ </form>
+ <p>评论查询</p>
+  <form action='/Server/course/query_comment' method="post" name="form3">
+ id<input name='id' type='text'></input>
+ 开始范围<input name='beg'value='0' type='text'></input>
+  结束范围<input name='end' value='5' type='text'></input>
+ <input type='submit'></input>
+ </form>
+  <p>回复查询</p>
+  <form action='/Server/course/query_reply' method="post" name="form5">
+ id<input name='id' type='text'></input>
+ 开始范围<input name='beg'value='0' type='text'></input>
+  结束范围<input name='end' value='5' type='text'></input>
+ <input type='submit'></input>
+ </form>
+ <p>发信</p>
+  <form action='/Server/account/send' method="post" name="form4"> 
+ to<input name='to' type='text'></input>
+  title<input name='title' type='text'></input>
+ <textarea name='ct' ></textarea>
+ <input type='submit'></input>
+ </form>
+ <p>收信</p>
+  <form action='/Server/account/inbox' method="post" name="form3">
+ 消息id<input name='id' type='text'></input>
+
+ <input type='submit'></input>
+ </form>
+ <p>查询</p>
+  <form action='/Server/library/qs' method="POST" name="form5"> 
+ q<input name='q' type='text'></input>
+  page<input name='page' type='text'></input>
+
+ <input type='submit'></input>
+ </form>
+ 
+  <p>发系统通知</p>
+  <form action='/Server/manage/send_sys_notice' method="POST" name="form5"> 
+ title<input name='title' type='text'></input>
+  content<input name='content' type='text'></input>
+
+ <input type='submit'></input>
+ </form>
+   <p>cha系统通知</p>
+  <form action='/Server/app/sys_notice' method="POST" name="form5"> 
+ id<input name='id' type='text'></input>
+
+ <input type='submit'></input>
+ </form>
+  </body>
+  </html>
