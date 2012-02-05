@@ -36,18 +36,12 @@ def _loginFromData(request,data):
 			return HttpResponse('-1')
 	return HttpResponse('-202')
 
-
-@require_http_methods(['POST'])
-def login(request):
-		
-	data={}
-	PHPSESSID = request.POST.get('sid','')
-	headers={'User-Agent':user_agent,'PHPSESSID':PHPSESSID}
-	data['database']='0'
-	data['sno']=request.POST.get('sno','')
-	data['passwd']=request.POST.get('pwd','')
-	data['number']=request.POST.get('check','')
-	if data['number']==u'':
+def login_dean_with_data(**kwarg):
+	data = kwarg['data']
+	PHPSESSID = kwarg['PHPSESSID']
+	request = kwarg['request']
+    	headers={'User-Agent':user_agent,'PHPSESSID':PHPSESSID}
+    	if data['number']==u'':
 		return _loginFromData(request,data)
 	else:		
 		url_values=urllib.urlencode(data)
@@ -55,11 +49,11 @@ def login(request):
 		response=urllib2.urlopen(req)
 		logindata=response.read()
 		if re.search(plogin,logindata.decode('gb18030')):
-			#得到选课表----
+			'''get course data'''
 			req=urllib2.Request(urlxkqk+PHPSESSID,None,headers)
 			response=urllib2.urlopen(req)
 			doc_xkqk=response.read().decode('GBK')
-			"get profile from dean"
+			'''get profile from dean'''
 			req=urllib2.Request(urlprofile+PHPSESSID,None,headers)
 			response=urllib2.urlopen(req)
 			doc_profile=response.read().decode('GBK')
@@ -69,7 +63,7 @@ def login(request):
 			response.close()
 			register={}
 			register = dict_deanprofile(doc_profile)
-			"if user does not exists yet"
+			'''if user does not exists yet'''
 			if User.objects.filter(username=data['sno']).count() == 0:
 				
 				userprofile = Profile(realname=register.get('realname',''),
@@ -86,7 +80,7 @@ def login(request):
 				userprofile.user=user
 				userprofile.save()
 
-				"begin handle course data"
+				'''begin handle course data'''
 				try:
 					error = handle_course(doc_xkqk,user)
 				except:
@@ -116,7 +110,7 @@ def login(request):
 				profile.user_type = 0;
 				profile.save()
 				course_set = cuser.course_set.filter(termnumber = getTermNumber())
-				#try:
+				
 				for ccourse in course_set:
 					ccourse.user.remove(cuser)
 					ccourse.save()
@@ -125,7 +119,7 @@ def login(request):
 				
 				return _loginFromData(request,data)
 		else:
-		    '''退出'''
+		    '''exit'''
 		    req=urllib2.Request(urlexit+PHPSESSID)
 		    urllib2.urlopen(req)
 		    response.close()
@@ -133,98 +127,27 @@ def login(request):
 		    return HttpResponse('<!--'+error+'-->')
 	return HttpResponse('-1')
 
-
 @require_http_methods(['POST'])
 def login_dean(request):
 		
 	data={}
 	PHPSESSID=request.POST.get('sessionid','')
-	headers={'User-Agent':user_agent,'PHPSESSID':PHPSESSID}
 	data['database']='0'
 	data['sno']=request.POST.get('username','')
 	data['passwd']=request.POST.get('passwd','')
 	data['number']=request.POST.get('valid','')
-	if data['number']==u'':
-		return _loginFromData(request,data)
-	else:		
-		url_values=urllib.urlencode(data)
-		req=urllib2.Request(urlin+PHPSESSID,url_values,headers)
-		response=urllib2.urlopen(req)
-		logindata=response.read()
-		if re.search(plogin,logindata.decode('gb18030')):
-			#得到选课表----
-			req=urllib2.Request(urlxkqk+PHPSESSID,None,headers)
-			response=urllib2.urlopen(req)
-			doc_xkqk=response.read().decode('GBK')
-			"get profile from dean"
-			req=urllib2.Request(urlprofile+PHPSESSID,None,headers)
-			response=urllib2.urlopen(req)
-			doc_profile=response.read().decode('GBK')
-			'''退出'''
-			req=urllib2.Request(urlexit+PHPSESSID)
-			urllib2.urlopen(req)
-			response.close()
-			register={}
-			register = dict_deanprofile(doc_profile)
-			"if user does not exists yet"
-			if User.objects.filter(username=data['sno']).count() == 0:
-				
-				userprofile = Profile(realname=register.get('realname',''),
-					school = register.get('school',''),
-					grade = register.get('grade',''),
-					major = register.get('major',''),
-					mphone = register.get('mphone',''),
-					phone = register.get('phone',''),
-					user_type = 0
-					)
-				user = User.objects.create_user(username=data['sno'],password=data['passwd'],email=register.get('email','example@example.com'))
-				user.save()
+	return login_dean_with_data(**locals())
 
-				userprofile.user=user
-				userprofile.save()
+	
 
-				"begin handle course data"
-				try:
-					error = handle_course(doc_xkqk,user)
-				except:
-					return HttpResponse('-5')
-				
-				
-				return _loginFromData(request,data)
-			else:
-				cuser = User.objects.get(username=data['sno'])
-				cuser.set_password(data['passwd'])
-				try:
-					profile = Profile.objects.get(user=cuser.id)
-				except:
-					profile = Profile(realname=register.get('realname',''),
-						school = register.get('school',''),
-						grade = register.get('grade',''),
-						major = register.get('major',''),
-						mphone = register.get('mphone',''),
-						phone = register.get('phone',''),
-						user_type = 0
-					)
-				profile.realname = register.get('realname','')
-				profile.school = register.get('school','')
-				profile.grade = register.get('grade','')
-				profile.grade = mphone = register.get('mphone','')
-				profile.phone = register.get('phone','')
-				profile.user_type = 0;
-				profile.save()
-				course_set = cuser.course_set.filter(termnumber = getTermNumber())
-				#try:
-				for ccourse in course_set:
-					ccourse.user.remove(cuser)
-					ccourse.save()
-				cuser.save()
-				error = handle_course(doc_xkqk,cuser)
-				
-				return _loginFromData(request,data)
-		else:
-			error = logindata.decode('gb18030')
-			return HttpResponse(error)
-	return HttpResponse('-1')
+def login(request):
+   	data={}
+	PHPSESSID=request.POST.get('sid','')
+	data['database']='0'
+	data['sno']=request.POST.get('sno','')
+	data['passwd']=request.POST.get('pwd','')
+	data['number']=request.POST.get('check','')
+	return login_dean_with_data(**locals())
 
 
 @require_http_methods(['POST'])
@@ -267,7 +190,7 @@ def login_portal(request):
 		if match_login:
 			register = {}
 			register['realname'] = match_login.group(1)
-			'Get Course Doc'
+			'''Get Course Doc'''
 			req = urllib2.Request(url_course_doc)
 			response = opener.open(req)
 			doc_xkqk = response.read()
@@ -277,7 +200,7 @@ def login_portal(request):
 			response = opener.open(req)
 			response.close()
 			
-			"if user does not exists yet"
+			'''if user does not exists yet'''
 			if User.objects.filter(username = data['{actionForm.userid}']).count() == 0:
 				
 				
@@ -297,7 +220,7 @@ def login_portal(request):
 				userprofile.save()
 
 				
-				"begin handle course data"
+				'''begin handle course data'''
 				error = MasterStu_handler.parse_course_page(doc_xkqk,cuser)
 				_login(request)
 				return HttpResponse(error)
@@ -353,7 +276,7 @@ def index(request):
 	img.close()
 	context={'res': "image"+".gif",'sid':PHPSESSID,}
 	
-	"setup for portal testing"
+	'''setup for portal testing'''
 	url_portal_img = 'http://portal.pku.edu.cn/infoPortal/DrawServlet?Rand=5052.215403411537'
 	cookieJar=cookielib.CookieJar()
 	opener=urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJar))

@@ -100,7 +100,8 @@ def run_update_classroom():
 		
 		error += handle_classroom(string,number)
 		
-		number += 1
+		#number += 1
+		number = 12
 		data={}
 		data['zhouci'] = str(number)
 		data['jxl']='99'
@@ -113,4 +114,4 @@ def run_update_classroom():
 		
 		response.close()
 		error += str(number) +':'+ handle_classroom(string,number)
-		return error
+	return error

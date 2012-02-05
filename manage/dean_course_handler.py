@@ -53,11 +53,12 @@ def run_update_dean_course(request):
 	
 	for SchoolCode in listschool:
 		
-		queryset=School.objects.filter(code=SchoolCode[0])
+		queryset = School.objects.filter(code=SchoolCode[0])
 		if queryset.count() == 0:
 			cschool = School(code = SchoolCode[0],name = SchoolCode[1],ename = SchoolCode[2])
 			cschool.save()
 		meg += _handleCourseOfSchool(SchoolCode[0],xq)
+		
 	return HttpResponse(meg)	
 
 	
@@ -70,8 +71,9 @@ def _getSchoolList(string):
 		if i > 0:
 			temp = (tr.contents[0].getText(),tr.contents[1].contents[0].getText(),tr.contents[2].contents[0].getText())
 			contextlist.append(temp)
-	return contextlist
-	
+
+	return [(tr.contents[0].getText(),tr.contents[1].contents[0].getText(),tr.contents[2].contents[0].getText()) for tr in tbody[1:]]
+
 def _handleCourseOfSchool(SchoolCode,xq):
 	meg = ' '
 	def __stringCourse(SchoolCode):
@@ -93,12 +95,8 @@ def _handleCourseOfSchool(SchoolCode,xq):
 def _handleCourseFromTable(string,xq,SchoolCode = ''):
 	meg = ' '
 	def __ListDaydataFromString(context_list):
-			ccourse = course()
-			lst = list()
-			for i in range(7):
-				lst.append(ccourse.encodeTimeFromDayString(context_list[11+i]))
-			
-			return lst
+			ccourse = course()			
+			return [ccourse.encodeTimeFromDayString(context_list[11+i]) for i in range(7)]
 	strainer = SoupStrainer('table',border='1')
 	soup_course = BeautifulSoup(string,parseOnlyThese=strainer,fromEncoding = 'GBK')
 	tbody = soup_course.table
@@ -149,12 +147,8 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
 def _handleCourseFromTable2(string,xq,SchoolCode = None):
 	meg = ' '
 	def __ListDaydataFromString(context_list):
-			ccourse = course()
-			lst = list()
-			for i in range(7):
-				lst.append(ccourse.encodeTimeFromDayString(context_list[10+i]))
-			
-			return lst
+			ccourse = course()			
+			return [ccourse.encodeTimeFromDayString(context_list[10+i]) for i in range(7)]
 	strainer=SoupStrainer('table',border='1')
 	soup_course=BeautifulSoup(string,parseOnlyThese=strainer,fromEncoding="GBK")
 	tbody=soup_course.table

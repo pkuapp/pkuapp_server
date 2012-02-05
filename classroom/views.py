@@ -28,14 +28,8 @@ def feedback(request):
 def jsonBuilding(request):
     	'''there're some bugs here.
     	
-	'''
-	result = list()
-	for i,x in enumerate(list_building_old):
-		building = {
-			"name":x,
-			"location": i+1,
-		}
-		result.append(building)
+	'''		
+	result = [{'name':x,'location':i+1} for i,x in enumerate(list_building_old)]
 	return HttpResponse(simplejson.dumps(result),mimetype="application/json")
 	
 @require_http_methods(['POST'])			
@@ -49,29 +43,8 @@ def jsonclassroom(request):
 
 	if building != u'99':
 		if day != u'99':
-		    lists = [{'name':cplace.name,'t':time} for time in [cplace.placet_set.filter(weeknumber=c).values(u'day'+day) for cplace in place.objects.filter(location=building).order_by('name')]]
+		    lists = [{'name':cplace.name,'t':times[0]} for times in [cplace.placet_set.filter(weeknumber=c).values(u'day'+day) for cplace in place.objects.filter(location=building).order_by('name')]  if len(times) > 0]
 			
-		else:
-			listplace = place.objects.filter(location=building)
-			for cplace in listplace:
-				listt = cplace.placet_set.filter(weeknumber=c).values()
-				for t in listt:
-					lists.append({'name':cplace.name,'t':t})
-		    lists = [{'name':cplace.name,'t':time} for time in [cplace.placet_set.filter(weeknumber=c).values(u'day'+day) for cplace in place.objects.filter(location=building).order_by('name')]]
-	else:
-		if day != u'99':
-			listplace = place.objects.all()
-			for cplace in listplace:
-				listt = cplace.placet_set.filter(weeknumber=c).values(u'day'+day)
-				for t in listt:
-					lists.append({'name':cplace.name,'t':t})
-		else:
-			listplace = place.objects.all()
-			for cplace in listplace:
-				listt = cplace.placet_set.filter(weeknumber=c).values()
-				for t in listt:
-					lists.append({'name':cplace.name,'t':t})
-	
 	return HttpResponse(simplejson.dumps(list(lists)),mimetype="application/json")
 		
 		

@@ -54,32 +54,6 @@ def parse_portal_profile(target):
             if m:
             	    context[k]=m.group(1).strip("""'""")
         return context
-"""def handle_classroom(string):
-	tempfile=open('a.html','w')
-	strainer=SoupStrainer('table',border="1")
-	soup_classroom=BeautifulSoup(string,parseOnlyThese=strainer,\
-		fromEncoding="GBK"
-		)
-	lists=list()
-	
-
-	for tr in soup_classroom.table.tbody:
-	    if type(tr)==Tag:
-	    	index=-4
-	    	list_occupy=list()
-		for i,td in enumerate(tr):
-		   
-		    if type(td)==Tag:
-		    	
-		    	index+=1
-			if td.get('style')!=None:
-				list_occupy.append(index)
-		updatedata(list_occupy,namestring=tr.contents[0].contents[0].__str__(),\
-		    	    roomtype=tr.contents[1].contents[0].__str__(),\
-		    	   capacity=tr.contents[2].contents[0].__str__()
-		    	    )
-	return '0'"""
-
         
 def parse_course_page(string,user):
 	keywords = {}
@@ -125,7 +99,7 @@ def parse_course_page(string,user):
 			contextplace = place.dictFromPlaceString(context['rawplace'])
 			
 			if contextplace != None:
-				placekey=str(contextplace['location'])+contextplace['interid']
+				placekey = str(contextplace['location'])+contextplace['interid']
 				if place.objects.filter(keyid=placekey).count()>0:
 					thepalce=place.objects.get(keyid=placekey)
 					thecourse.place=thepalce

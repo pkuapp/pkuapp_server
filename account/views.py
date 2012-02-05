@@ -57,12 +57,8 @@ def handle_notice(request):
 		value_list = list(obj_list.values())
 		result_dict = {}
 		result_dict['v'] = "0.63"
-		for i,obj in enumerate(obj_list):
-			context = value_list[i]
-			content = obj.getnotice()
 			
-			context.setdefault('content',content)
-			value_list[i] = context
+		map((lambda obj:obj.getnotice().setdefault('content',content)),obj_list)
 		result_dict['c'] = list(value_list)
 		return HttpResponse(simplejson.dumps(result_dict))
 	
@@ -74,13 +70,13 @@ def send(request):
 	ctitle=request.POST.get('title','')
 	sendto=request.POST.get('to').split(u';')
 	cprofile=Profile.objects.get(user=user)
-	csms=sms(title=ctitle,content=ccontent,sendfrom=user,sendername=cprofile.realname,state=False)
+	csms = sms(title=ctitle,content=ccontent,sendfrom=user,sendername=cprofile.realname,state=False)
 	csms.save()
-	cnotice=notice(sendername=cprofile.realname,state=False,ob=csms.id,ntype=2)
+	cnotice = notice(sendername=cprofile.realname,state=False,ob=csms.id,ntype=2)
 	for x in sendto:
-		touser=User.objects.get(id=int(x))
+		touser = User.objects.get(id=int(x))
 		csms.touser.add(touser)
-		cnotice.touser=touser
+		cnotice.touser = touser
 		csms.save()
 		cnotice.save()
 	return HttpResponse('0')

@@ -21,6 +21,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+
 hostLibrary = "http://162.105.138.200"
 patternQuickSearch = re.compile(u"""form name="searchform" method="post" action="(.+)" onsubmit""")
 patternListResult = re.compile(u"(\<li\>[^\.]+Dynamic content lookup(.|\n)+\</li\>)(.|\n)+navigation")

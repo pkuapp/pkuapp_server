@@ -26,7 +26,4 @@ urlpatterns = patterns('Server.classroom.views',
 	               (r'^feedback$','feedback'),
 	               (r'^jsonlocation$','jsonBuilding'),
 )
-urlpatterns += patterns('',
-            (r'^media/(?P<path>.*)$', 'django.views.static.serve',
-                {'document_root': settings.MEDIA_ROOT}),
-        )
+
