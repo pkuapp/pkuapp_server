@@ -72,7 +72,7 @@ def _getSchoolList(string):
 			temp = (tr.contents[0].getText(),tr.contents[1].contents[0].getText(),tr.contents[2].contents[0].getText())
 			contextlist.append(temp)
 
-	return [(tr.contents[0].getText(),tr.contents[1].contents[0].getText(),tr.contents[2].contents[0].getText()) for tr in tbody[1:]]
+	return [(tr.contents[0].getText(),tr.contents[1].contents[0].getText(),tr.contents[2].contents[0].getText()) for i,tr in enumerate(tbody) if i >0]
 
 def _handleCourseOfSchool(SchoolCode,xq):
 	meg = ' '
@@ -96,7 +96,7 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
 	meg = ' '
 	def __ListDaydataFromString(context_list):
 			ccourse = course()			
-			return [ccourse.encodeTimeFromDayString(context_list[11+i]) for i in range(7)]
+			return [ccourse.daydataFromDayString(context_list[11+i]) for i in range(7)]
 	strainer = SoupStrainer('table',border='1')
 	soup_course = BeautifulSoup(string,parseOnlyThese=strainer,fromEncoding = 'GBK')
 	tbody = soup_course.table
@@ -108,12 +108,12 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
 			    context_list = list()
 			    for td in tr.contents:
 				    if td.font != None:
-					    context_list.append(td.font.getText().strip(u'&nbsp;').strip(u' ')) 
+					    context_list.append(td.font.getText().replace(u'&nbsp;','').strip(u' ')) 
 					
 				    elif td.a != None:    
-					    context_list.append(td.a.getText().strip(u'&nbsp;').strip(u' '))
+					    context_list.append(td.a.getText().replace(u'&nbsp;','').strip(u' '))
 				    else:
-					    temp = td.getText().strip(u'&nbsp;').strip(u' ')
+					    temp = td.getText().replace(u'&nbsp;','').strip(u' ')
 					    context_list.append(temp)
 			
 			    
@@ -129,6 +129,7 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
 				   ccourse = queryset.get(keyid=ckeyid)
 				   ccourse.SchoolCode = SchoolCode
 				   ccourse.CourseType = context_list[3]
+				   ccourse.name = context_list[1]
 				   ccourse.save()
 				   
 			    else:
@@ -138,7 +139,7 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
 				   	   name=context_list[1],rawplace=None,time_test=None,credit=context_list[4],\
 				   	   time=context_list[10],day1=dayx[0],day2=dayx[1],day3=dayx[2],day4=dayx[3],\
 				   	   day5=dayx[4],day6=dayx[5],day7=dayx[6],teachername=context_list[7],\
-				   	   SchoolCode = SchoolCode,Coursetype = context_list[3])
+				   	   SchoolCode = SchoolCode,Coursetype = context_list[3],course_category=0)
 				   ccourse.save()
 				  
       
@@ -148,7 +149,7 @@ def _handleCourseFromTable2(string,xq,SchoolCode = None):
 	meg = ' '
 	def __ListDaydataFromString(context_list):
 			ccourse = course()			
-			return [ccourse.encodeTimeFromDayString(context_list[10+i]) for i in range(7)]
+			return [ccourse.daydataFromDayString(context_list[10+i]) for i in range(7)]
 	strainer=SoupStrainer('table',border='1')
 	soup_course=BeautifulSoup(string,parseOnlyThese=strainer,fromEncoding="GBK")
 	tbody=soup_course.table
@@ -160,12 +161,12 @@ def _handleCourseFromTable2(string,xq,SchoolCode = None):
 			    context_list = list()
 			    for td in tr.contents:
 				    if td.font != None:
-					    context_list.append(td.font.getText().strip(u'&nbsp;').strip(u' ')) 
+					    context_list.append(td.font.getText().replace(u'&nbsp;','').strip(u' ')) 
 					
 				    elif td.a != None:    
-					    context_list.append(td.a.getText().strip(u'&nbsp;').strip(u' '))
+					    context_list.append(td.a.getText().replace(u'&nbsp;','').strip(u' '))
 				    else:
-					    temp = td.getText().strip(u'&nbsp;').strip(u' ')
+					    temp = td.getText().replace(u'&nbsp;','').strip(u' ')
 					    context_list.append(temp)
 			
 			    
@@ -181,6 +182,8 @@ def _handleCourseFromTable2(string,xq,SchoolCode = None):
 				   ccourse = queryset.get(keyid=ckeyid)
 				   ccourse.SchoolCode = SchoolCode
 				   ccourse.CourseType = context_list[3]
+				   ccourse.name = context_list[1]
+
 				   ccourse.save()
 				   
 			    else:
@@ -190,7 +193,7 @@ def _handleCourseFromTable2(string,xq,SchoolCode = None):
 				   	   name=context_list[1],rawplace=None,time_test=None,credit=context_list[3],\
 				   	   time=context_list[9],day1=dayx[0],day2=dayx[1],day3=dayx[2],day4=dayx[3],\
 				   	   day5=dayx[4],day6=dayx[5],day7=dayx[6],teachername=context_list[6],\
-				   	   SchoolCode = SchoolCode,Coursetype = context_list[2])
+				   	   SchoolCode = SchoolCode,Coursetype = context_list[2],course_category=0)
 				   ccourse.save()
 				  
       

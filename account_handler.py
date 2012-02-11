@@ -74,7 +74,7 @@ def handle_course(string,user):
         		
 			for td in tr:
 				if type(td) == Tag:
-					x = td.contents[0].__str__().decode('utf8').strip('&nbsp;')
+					x = td.contents[0].__str__().decode('utf8').replace('&nbsp;','')
 					
 					lists.append(x)
 			context = dict_course(lists)

@@ -137,6 +137,9 @@ class course(models.Model):
 	Coursetype = models.CharField(max_length=10,null=True)
 	SchoolCode = models.CharField(max_length=10,null=True)
 	txType = models.CharField(max_length=10,null=True)
+
+	cname = models.CharField(max_length=255,null=True)
+	ename = models.CharField(max_length=255,null=True)
 	class Meta:
 		db_table = 'server_course'
 		

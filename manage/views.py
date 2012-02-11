@@ -53,7 +53,7 @@ def getTeacherData(request):
 
 def update_dean_course(request):
 	''''''
-	error = run_update_dean_course()
+	error = run_update_dean_course(request)
 	return HttpResponse(error)	
 	
 def update_classroom(request):
@@ -99,7 +99,7 @@ def update_course_elective(request):
 		return render_to_response('elective_course.html',context)
 			    
 def portal(request):
-	return render_to_response('portal.html',context)
+	return render_to_response('portal.html')
 
 @is_staff_required
 @login_required

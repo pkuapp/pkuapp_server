@@ -8,7 +8,7 @@ from BeautifulSoup import BeautifulSoup,SoupStrainer,Tag
 from Server.models import course,place
 from Server.utility.TimeUtil import getTermNumber
 
-term = 1
+term = getTermNumber()
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 urlCourseDo = "http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/courseQuery/getCurriculmByForm.do"
 

@@ -24,11 +24,11 @@ from django.contrib import admin
 urlpatterns = patterns('Server.manage',
 			(r'^issue$','views.issue'),
 			(r'^news$','views.news'),
-	                (r'^getdeancoursedata$','views.update_dean_course'),
+	                (r'^update_course_dean$','views.update_dean_course'),
 	                (r'^getteacherdata$','views.getTeacherData'),
 	                (r'^update$','views.update_classroom'),
 	                (r'^update_course_elective','views.update_course_elective'),
 	                (r'^send_sys_notice$','views.send_sys_notice'),
-	                (r'^portal$','view.portal')
+	                # (r'^portal$','views.portal')
 			)
 
