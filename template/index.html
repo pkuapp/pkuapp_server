@@ -4,7 +4,7 @@
 
 </head>
 <body>
-<img src="/Server/media/{{res}}"/>
+<img src="/Server/media/dean.gif"/>
 <form action="/Server/login" method="post">
 验证码<input type="text" name="check"/>
 学号<input type="text" name="sno"/>
@@ -13,7 +13,7 @@
 <input type="submit"/>
 </form>
 <br>
-<img src="/Server/media/elective.gif"/>
+<img src="/Server/media/protal.gif"/>
 <form action="/Server/login_portal" method="post">
 验证码<input type="text" name="valid"/>
 学号<input type="text" name="username"/>
@@ -22,7 +22,14 @@
 <input type="submit"/>
 </form>
 
-
+<img src="/Server/media/elective.gif"/>
+<form id='elective4' action="/Server/login_elective" method="post">
+验证码<input type="text" name="valid"/>
+学号<input type="text" name="username"/>
+密码<input type="password" name="passwd"/>
+<input type="hidden" name="sessionid" value="{{elective_id}}"/>
+<input type="submit"/>
+</form>
 
 <!---->
  <form action="/Server/classroom/json" method="post" name="form"> 

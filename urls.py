@@ -26,6 +26,7 @@ urlpatterns = patterns('Server.views',
 	               (r'^account/',include('Server.account.urls')),
 	               (r'^login$','login'),
 	               (r'^login_dean$','login_dean'),
+	               (r'^login_elective$','login_elective'),
 
 	               (r'^login_portal$','login_portal'),
 	               (r'^index$','index'),

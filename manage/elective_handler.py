@@ -9,7 +9,7 @@ from Server.models import course,place
 from Server.utility.TimeUtil import getTermNumber
 
 term = getTermNumber()
-user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
 urlCourseDo = "http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/courseQuery/getCurriculmByForm.do"
 
 urlTongXuanKe2 = 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/courseQuery/queryCurriculum.jsp?netui_row=syllabusListGrid%3B50'
@@ -20,7 +20,7 @@ urlCoursePagei = 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/c
 list_day = [u'一',u'二',u'三',u'四',u'五',u'六',u'日']
 
 re_time=re.compile(u'([每|单|双]周)周(.?)([0-9]+)~([0-9]+)')
-re_TotalPage = re.compile(u'共 ([0-9]+) 页')
+re_TotalPage = re.compile(u'of ([0-9]+)')
 course_type_list = ['education_plan_bk','speciality','politics','english','gym','trans_choice','pub_choice','liberal_computer','pt']
 
 def run_elective_course_update(cookie_value):
@@ -35,11 +35,13 @@ def run_elective_course_update(cookie_value):
 		request.add_header('Cookie',cookie_value)
 		response = urllib2.urlopen(request)
 		doc = response.read()
+		# return doc
 		response.close()
 		match_page = re_TotalPage.search(doc)
 		return_m += handle_course_list(doc,ctype)
+		# return match_page
 		if match_page:
-			for i in xrange(1,match_page.group(1)):
+			for i in xrange(1,int(match_page.group(1))):
 				urlPage = urlCoursePagei + str(i*50)
 				request = urllib2.Request(urlPage,values)
 				request.add_header('Cookie',cookie_value)
