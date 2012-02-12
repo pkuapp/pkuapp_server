@@ -69,17 +69,16 @@ def parse_course_page(string,cuser):
 
 def savecourse(context,cuser):
     courseid = course.objects.filter(name__contains=context['name'])[0].courseid
-    error = ''
-    
-    keyid = courseid + context.get('timeKey','') + context['teachername']
+    error = u''
     try:
-        ccourse = course.objects.get(courseid=context['courseid'],termnumber=term)
+        keyid = courseid + context.get('timeKey','') + context['teachername']
+        try:
+            ccourse = course.objects.get(courseid=context['courseid'],termnumber=term)
+        except:
+            ccourse = course.objects.get(keyid = keyid,termnumber=term)
+
+        ccourse.user.add(cuser)
+        ccourse.save()
     except:
-        ccourse = course.objects.get(keyid = keyid,termnumber=term)
-    ccourse.user.add(cuser)
-    ccourse.save()
-    try:
-        pass
-    except:
-        error += 'keyid:'+keyid+'##'
+        error += 'name:'+context['name']+'#'
     return error
