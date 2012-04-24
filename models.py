@@ -143,10 +143,6 @@ class course(models.Model):
 	class Meta:
 		db_table = 'server_course'
 		
-	def cname(self):
-		'this function is NOT completed yet.'
-		p = re.compile(u"""([a-zA-Z]*[()A-Za-z0-9]*$)""")
-		
 	def get_time_display(self):
 		"Deprecated"
 		context={}

@@ -22,6 +22,7 @@ list_day = [u'一',u'二',u'三',u'四',u'五',u'六',u'日']
 re_time=re.compile(u'([每|单|双]周)周(.?)([0-9]+)~([0-9]+)')
 re_TotalPage = re.compile(u'of ([0-9]+)')
 course_type_list = ['education_plan_bk','speciality','politics','english','gym','trans_choice','pub_choice','liberal_computer','pt']
+re_TotalPage = re.compile(u'of ([0-9]+)')
 
 def run_elective_course_update(cookie_value):
 	"登陆后将cookie_value传入"
@@ -41,13 +42,14 @@ def run_elective_course_update(cookie_value):
 		return_m += handle_course_list(doc,ctype)
 		# return match_page
 		if match_page:
-			for i in xrange(1,int(match_page.group(1))):
+			for i in xrange(1,int(match_page.group(1))+1):
 				urlPage = urlCoursePagei + str(i*50)
 				request = urllib2.Request(urlPage,values)
 				request.add_header('Cookie',cookie_value)
 				response = urllib2.urlopen(request)
-				return_m += handle_course_list(response.read(),ctype)
+				doc = response.read()
 				response.close()
+				return_m += handle_course_list(doc,ctype)
 	
 	"""data2 = {}
 	data2['wlw-radio_button_group_key:{actionForm.courseSettingType}'] = 'trans_choice'
@@ -228,6 +230,7 @@ def handle_course_list(string,course_type='default'):
 				    'txType':contents[5].contents[0].getText(),
 				    'teachername':contents[9].contents[0].getText(),
 				}
+	
 				time_context = match_time(context['timeandplace'])
 				place_context = place.dictFromPlaceString(context['timeandplace'])
 				context.update(time_context)

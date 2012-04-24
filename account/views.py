@@ -16,7 +16,7 @@ from Server.utility.TimeUtil import getTermNumber
 @login_required
 def json_mycourse(request):
 	user=request.user
-	courselist=user.course_set.filter(termnumber=getTermNumber()).values('classnum','courseid','id','name','credit','day1','day2','day3','day4','day5','day6','day7','place','rawplace','time','time_test','teachername')
+	courselist=user.course_set.filter(termnumber=getTermNumber()).values('cname','ename','classnum','courseid','id','name','credit','day1','day2','day3','day4','day5','day6','day7','place','rawplace','time','time_test','teachername')
 	return HttpResponse(simplejson.dumps(list(courselist)), mimetype='application/json')
 
 @login_required
@@ -37,7 +37,6 @@ def json_myprofile(request):
 def handle_notice(request):
 	user=request.user
 	if request.method=='POST':
-		
 		listx=request.POST.get('id','').split(u';')
 		try:
 			list_id = [int(x)  for x in listx]
@@ -56,10 +55,22 @@ def handle_notice(request):
 		obj_list=user.notice_set.filter(state=False)
 		value_list = list(obj_list.values())
 		result_dict = {}
-		result_dict['v'] = "0.63"
+		result_dict['v'] = "0.632"
 			
-		map((lambda obj:obj.getnotice().setdefault('content',content)),obj_list)
-		result_dict['c'] = list(value_list)
+		#map((lambda obj:obj.getnotice().setdefault('content',obj.getnotice())),obj_list)
+		#result_dict['c'] = list(value_list)
+		notice_list = list()
+		for i,obj in enumerate(obj_list):
+			context = value_list[i]
+			try:
+				content = obj.getnotice()
+
+				context.setdefault('content',content)
+				notice_list.append(context)
+			except:
+				pass
+				
+		result_dict['c'] = list(notice_list)
 		return HttpResponse(simplejson.dumps(result_dict))
 	
 @login_required

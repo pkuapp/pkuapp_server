@@ -28,6 +28,7 @@ plogin=re.compile(u'parent\.location\.href="student_index\.php\?PHPSESSID')
 
 
 def _loginFromData(request,data):
+
 	user = authenticate(username = data['sno'],password = data['passwd'])
 	if user is not None:
 		if user.is_active:
@@ -49,6 +50,7 @@ def login_dean_with_data(**kwarg):
 		req=urllib2.Request(urlin+PHPSESSID,url_values,headers)
 		response=urllib2.urlopen(req)
 		logindata=response.read()
+		response.close()
 		if re.search(plogin,logindata.decode('gb18030')):
 			'''get course data'''
 			req=urllib2.Request(urlxkqk+PHPSESSID,None,headers)
@@ -83,6 +85,7 @@ def login_dean_with_data(**kwarg):
 
 				'''begin handle course data'''
 				try:
+					pass
 					error = handle_course(doc_xkqk,user)
 				except:
 					return HttpResponse('-5')
@@ -117,7 +120,6 @@ def login_dean_with_data(**kwarg):
 					ccourse.save()
 				cuser.save()
 				error = handle_course(doc_xkqk,cuser)
-				
 				return _loginFromData(request,data)
 		else:
 		    '''exit'''
@@ -190,11 +192,7 @@ def login_elective(request):
 			register['realname'] = match_login.group(2)
 			register['school'] = match_login.group(1)
 			'''Get Course Doc'''
-			_req = urllib2.Request(urlCourseResults)
-			_req.add_header('Cookie',cookie_value)
-			response = urllib2.urlopen(_req)
-			doc_xkqk = response.read()
-			response.close()
+			
 			'''退出'''
 			# no need
 			
@@ -219,7 +217,7 @@ def login_elective(request):
 
 				
 				'''begin handle course data'''
-				error = Stu_elective_handler.parse_course_page(doc_xkqk,cuser)
+				error = Stu_elective_handler.handleElectiveCourse(cookie_value,cuser)
 				_login(request)
 				return HttpResponse(error)
 				
@@ -251,11 +249,11 @@ def login_elective(request):
 					ccourse.user.remove(cuser)
 					ccourse.save()
 				cuser.save()
-				error = Stu_elective_handler.parse_course_page(doc_xkqk,cuser)
+				error = Stu_elective_handler.handleElectiveCourse(cookie_value,cuser)
 				_login(request)
 				return HttpResponse(error)
 		else:
-			return HttpResponse('-3')
+			return HttpResponse(mlogin)
 	return HttpResponse('-1')
 
 @require_http_methods(['POST'])
@@ -374,15 +372,14 @@ def index(request):
 	opener=urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
 	response=opener.open(urlimg)
 	t=response.read()
-	
+	PHPSESSID=''
 	for item in cookie:
 	    if item.name=='PHPSESSID':
 		    PHPSESSID=item.value
-	imgname=PHPSESSID
 	img=open(MEDIA_ROOT+"dean"+".gif","wb")
 	img.write(t)
 	img.close()
-	context={'sid':PHPSESSID,}
+	context={'sid':PHPSESSID}
 	
 	'''setup for portal testing'''
 	url_portal_img = 'http://portal.pku.edu.cn/infoPortal/DrawServlet?Rand=5052.215403411537'
@@ -416,7 +413,6 @@ def index(request):
 	    if item.name=='JSESSIONID':
 		    JSESSIONID=item.value
 		    
-	context={}
 	context['elective_id'] = JSESSIONID
 	return render_to_response("index.html",context)
 

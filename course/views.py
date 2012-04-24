@@ -117,12 +117,12 @@ def reply_comment(request):
 	
 	commentUser = tocomment.user
 	if commentUser != touser and user != commentUser:
-	try:
-	   	cnotice = notice(sendername=sendername,state=False,obj_id=tocomment.id,ntype=0)
-		cnotice.touser = commentUser
-		cnotice.save()
-	except:
-		return HttpResponse('-4')
+		try:
+		   	cnotice = notice(sendername=sendername,state=False,obj_id=tocomment.id,ntype=0)
+			cnotice.touser = commentUser
+			cnotice.save()
+		except:
+			return HttpResponse('-4')
 	
 	
 	return HttpResponse('0')
@@ -168,7 +168,7 @@ def query_course_fromCategory(request):
 	return HttpResponse(simplejson.dumps(courseData),mimetype='application/json')
 
 def ls(queryset):
-	return list(_removeExtraKey(queryset.values('Coursetype','SchoolCode','txType','id','classnum','courseid','time_test','time','name','credit','teachername','rawplace',*['day'+str(x+1) for x in range(7)])))
+	return list(_removeExtraKey(queryset.values('cname','Coursetype','SchoolCode','txType','id','classnum','courseid','time_test','time','credit','teachername','rawplace',*['day'+str(x+1) for x in range(7)])))
 
 			
 def _removeExtraKey(queryset):
@@ -191,7 +191,7 @@ def query_course_all2(request):
 	
 def query_course_all(request):
 	term = TimeUtil.getTermNumber()
-	queryset = course.objects.filter(termnumber = term).order_by('name')
+	queryset = course.objects.filter(termnumber = term).order_by('cname')
 	return HttpResponse(simplejson.dumps(ls(queryset)),mimetype='application/json')	
 
 		

@@ -29,21 +29,45 @@ def dict_deanprofile(target):
             if m:
             	    context[k]=m.group(1).strip("""'""")
         return context
+"""def handle_classroom(string):
+	tempfile=open('a.html','w')
+	strainer=SoupStrainer('table',border="1")
+	soup_classroom=BeautifulSoup(string,parseOnlyThese=strainer,\
+		fromEncoding="GBK"
+		)
+	lists=list()
+	
 
+	for tr in soup_classroom.table.tbody:
+	    if type(tr)==Tag:
+	    	index=-4
+	    	list_occupy=list()
+		for i,td in enumerate(tr):
+		   
+		    if type(td)==Tag:
+		    	
+		    	index+=1
+			if td.get('style')!=None:
+				list_occupy.append(index)
+		updatedata(list_occupy,namestring=tr.contents[0].contents[0].__str__(),\
+		    	    roomtype=tr.contents[1].contents[0].__str__(),\
+		    	   capacity=tr.contents[2].contents[0].__str__()
+		    	    )
+	return '0'"""
 def dict_course(lists):
 	daylist=list()
 	for i,raw_string in enumerate(lists[11:18]):
 		daydata = course.daydataFromDayString(raw_string)
 		daylist.append(daydata)
 	keyid = lists[0]
-	'''this part is to calc this unique keyid of course'''
+	"以下计算course的唯一识别码"
 	for i in range(7):
 		tempStr = lists[11+i].strip()
 		if tempStr:
 			keyid += str(i) + tempStr
 	
 	keyid = keyid.strip() + lists[7].strip()
-	
+	keyid = keyid.replace('&nbsp;','')
 	rawplace = lists[18]+lists[19]
 	
 	rawplace = rawplace.replace('\n','').replace('\t','').replace('&nbsp;','')
@@ -74,7 +98,7 @@ def handle_course(string,user):
         		
 			for td in tr:
 				if type(td) == Tag:
-					x = td.contents[0].__str__().decode('utf8').replace('&nbsp;','')
+					x = td.contents[0].__str__().decode('utf8').strip('&nbsp;')
 					
 					lists.append(x)
 			context = dict_course(lists)

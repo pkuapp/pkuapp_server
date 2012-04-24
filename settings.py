@@ -1,11 +1,7 @@
 # Django settings for backup project.
-import logging
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-logging.basicConfig(
-  level = logging.DEBUG, 
-  format = '%(asctime)s %(levelname)s %(module)s.%(funcName)s Line:%(lineno)d %(message)s',
-)
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -23,9 +19,6 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-DATABASE_OPTIONS = {
-    'read_default_file': '/ect/my.cnf',
-    }
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -34,12 +27,13 @@ DATABASE_OPTIONS = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'zh-cn'
+FILE_CHARSET='utf-8' 
+DEFAULT_CHARSET='utf-8'
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -52,17 +46,17 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/Library/WebServer/Documents/Server/media/'
+MEDIA_ROOT = 'D:/CADA/website/admin/mobile/Server/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/Server/res/'
+MEDIA_URL = '/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/dmedia/'
+ADMIN_MEDIA_PREFIX = '/amedia/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'r^v!3ctl^li8bo&+t4f+!%3z)l38j+i5u3)=7!fpiferir5td$'
@@ -88,7 +82,7 @@ ROOT_URLCONF = 'Server.urls'
 LOGIN_URL = '/Server/login_required/'
 
 TEMPLATE_DIRS = (
-	r'/Library/WebServer/Documents/Server/template'
+	'D:/CADA/website/admin/mobile/Server/template'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -100,10 +94,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    
     'Server',
-    'Server.course',
-    
+    'Server.app'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

@@ -43,7 +43,8 @@ def jsonclassroom(request):
 
 	if building != u'99':
 		if day != u'99':
-		    lists = [{'name':cplace.name,'t':times[0]} for times in [cplace.placet_set.filter(weeknumber=c).values(u'day'+day) for cplace in place.objects.filter(location=building).order_by('name')]  if len(times) > 0]
+			lists = [{'name':cplace.name,'t':cplace.placet_set.filter(weeknumber=c).values(u'day'+day)[0]} \
+		    for cplace in place.objects.filter(location=building).order_by('name') if cplace.placet_set.filter(weeknumber=c).count() > 0]
 			
 	return HttpResponse(simplejson.dumps(list(lists)),mimetype="application/json")
 		

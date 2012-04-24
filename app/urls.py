@@ -21,9 +21,11 @@ from django.contrib import admin
 
 
 
-urlpatterns = patterns('',
-			(r'^date$','Server.app.views.getpkutime'),
-			(r'^enddate$','Server.app.views.get_pku_end_time'),
-			(r'^sys_notice$','Server.app.views.get_sys_notice'),
+urlpatterns = patterns('Server.app.views',
+			(r'^date$','getpkutime'),
+			(r'^enddate$','get_pku_end_time'),
+            (r'^status$','getServerStatus'),
+			(r'^sys_notice$','.get_sys_notice'),
+            (r'iOS_version$','iOS_version'),
 			)
 

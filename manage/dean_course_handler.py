@@ -28,36 +28,43 @@ def run_update_dean_course(request):
     xn_string + "&xq=" +xq_string
     urlGeneralCourse = r"http://dean.pku.edu.cn/jiaoxuejihua/kcbtx.php?xn=" +\
     xn_string + "&xq=" +xq_string
-    meg = ''
-    # requestPEC = urllib2.Request(urlPubElectiveCourse)
-    # responseDoc = urllib2.urlopen(requestPEC)
-    # responseString = responseDoc.read()
-    # meg +=_handleCourseFromTable2(responseString,xq)
     
-    # requestPRC = urllib2.Request(urlPubReqCourse)
-    # responseString = urllib2.urlopen(requestPRC)
-    # meg += _handleCourseFromTable(responseString,xq)
+    meg = ''
+    requestPEC = urllib2.Request(urlPubElectiveCourse)
+    responseDoc = urllib2.urlopen(requestPEC)
+    responseString = responseDoc.read()
+    responseDoc.close()
+    meg +=_handleCourseFromTable2(responseString,xq)
+    
+    requestPRC = urllib2.Request(urlPubReqCourse)
+    response = urllib2.urlopen(requestPRC)
+    responseString = response.read()
+    response.close()
+    meg += _handleCourseFromTable(responseString,xq)
     
     requestGC = urllib2.Request(urlGeneralCourse)
-    responseString = urllib2.urlopen(requestGC).read()
+    response = urllib2.urlopen(requestGC)
+    responseString =response.read()
+    response.close()
     meg += _handleCourseFromTable2(responseString,xq)
     
     
     "getCourseofSchool"
-    # urlSchoolList = r"http://dean.pku.edu.cn/jiaoxuejihua/kcbxs.php?ll=1"
+    urlSchoolList = r"http://dean.pku.edu.cn/jiaoxuejihua/kcbxs.php?ll=1"
     
-    # requestSchoolList = urllib2.Request(urlSchoolList)
-    # responseDoc = urllib2.urlopen(requestSchoolList)
-    # responseString = responseDoc.read()
-    # listschool = _getSchoolList(responseString)
+    requestSchoolList = urllib2.Request(urlSchoolList)
+    responseDoc = urllib2.urlopen(requestSchoolList)
+    responseString = responseDoc.read()
+    responseDoc.close()
+    listschool = _getSchoolList(responseString)
     
-    # for SchoolCode in listschool:
+    for SchoolCode in listschool:
         
-    #   queryset = School.objects.filter(code=SchoolCode[0])
-    #   if queryset.count() == 0:
-    #       cschool = School(code = SchoolCode[0],name = SchoolCode[1],ename = SchoolCode[2])
-    #       cschool.save()
-    #   meg += _handleCourseOfSchool(SchoolCode[0],xq)
+      queryset = School.objects.filter(code=SchoolCode[0])
+      if queryset.count() == 0:
+          cschool = School(code = SchoolCode[0],name = SchoolCode[1],ename = SchoolCode[2])
+          cschool.save()
+      meg += _handleCourseOfSchool(SchoolCode[0],xq)
         
     return HttpResponse(meg)    
 
@@ -87,12 +94,14 @@ def _handleCourseOfSchool(SchoolCode,xq):
         request = urllib2.Request(urlCoursePlanData,postData)
         responseDoc = urllib2.urlopen(request)
         responseString = responseDoc.read()
+        responseDoc.close()
         return responseString
     
     string = __stringCourse(SchoolCode)
     return _handleCourseFromTable(string,xq,SchoolCode = SchoolCode)
     
 def _handleCourseFromTable(string,xq,SchoolCode = ''):
+    
     meg = ' '
     def __ListDaydataFromString(context_list):
             ccourse = course()          
@@ -146,6 +155,7 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
     return meg
     
 def _handleCourseFromTable2(string,xq,SchoolCode = None):
+    #xq=1004
     meg = ' '
     def __ListDaydataFromString(context_list):
             ccourse = course()          
@@ -179,8 +189,6 @@ def _handleCourseFromTable2(string,xq,SchoolCode = None):
                 ckeyid = ckeyid.strip()
                 ckeyid += context_list[6]
                 queryset = course.objects.filter(keyid=ckeyid,termnumber=xq)
-                raise sdf
-
                 if queryset.count() > 0:
                    ccourse = queryset.get(keyid=ckeyid)
                    ccourse.SchoolCode = SchoolCode

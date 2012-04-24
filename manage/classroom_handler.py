@@ -100,8 +100,8 @@ def run_update_classroom():
 		
 		error += handle_classroom(string,number)
 		
-		#number += 1
-		number = 12
+		number += 1
+		#number = 12
 		data={}
 		data['zhouci'] = str(number)
 		data['jxl']='99'
