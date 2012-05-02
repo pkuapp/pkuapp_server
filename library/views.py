@@ -7,7 +7,7 @@ import urllib2
 
 from Server.models import Profile
 from BeautifulSoup import BeautifulSoup
-import re 
+import re
 from xml.sax import make_parser
 from xml.sax import parseString
 from xml.sax.handler import ContentHandler
@@ -31,9 +31,9 @@ urlLibrary = "http://162.105.138.200/uhtbin/cgisirsi/0/0/0/49"
 
 def quickSearch(request):
 	listBook = list()
-	if request.method =='POST':
-		page = request.POST.get('page','1')
-		query = request.POST.get('q','')
+	if request.method =='GET':
+		page = request.GET.get('page','1')
+		query = request.GET.get('q','')
 		
 		request = urllib2.Request(urlLibrary)
 		response = urllib2.urlopen(request)
@@ -127,7 +127,7 @@ class ResultHandler(ContentHandler):
                 if self.isAuthor:
                         self.author = self.author + content
                 elif self.isTime:
-                        self.time = self.time + content
+                    self.time = self.time + content
                 elif self.isHolding:
                         self.holdings = self.holdings + content
                 
