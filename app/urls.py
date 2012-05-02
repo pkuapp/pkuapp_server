@@ -26,6 +26,8 @@ urlpatterns = patterns('Server.app.views',
 			(r'^enddate$','get_pku_end_time'),
             (r'^status$','getServerStatus'),
 			(r'^sys_notice$','.get_sys_notice'),
-            (r'iOS_version$','iOS_version'),
+            (r'^iOS_version$','iOS_version'),
+            (r'^Android_version$','Android_version'),
+            (r'^WP_version$','WP_version'),
 			)
 

@@ -21,8 +21,11 @@ def get_sys_notice(request):
 	cnotice = sys_notice.objects.get(id=cid)
 	return HttpResponse(simplejson.dumps(model_to_dict(cnotice)),mimetype='application/json')
 
-def getAndroidVersion(request):
-	pass
+def Android_version(request):
+	return HttpResponse(simplejson.dumps({'v':"0.632"}),mimetype='application/json')
 
 def iOS_version(request):
     return HttpResponse(simplejson.dumps({'beta':90}),mimetype='application/json')
+
+def WP_version(request):
+    return HttpResponse(simplejson.dumps({'v':"0.1"}),mimetype='application/json')
