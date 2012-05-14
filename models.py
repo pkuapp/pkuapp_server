@@ -130,7 +130,7 @@ class course(models.Model):
 	place = models.ForeignKey(place,null=True)
 	teachername = models.CharField(max_length=20)
 	teacherid = models.ForeignKey(teacher,null=True)
-	manager = models.ManyToManyField(User)
+	manager = models.ManyToManyField(User,related_name="+")
 	user = models.ManyToManyField(User)
 	course_category = models.IntegerField(choices=((0,u'校本部'),(1,u'研究生')))
 	
