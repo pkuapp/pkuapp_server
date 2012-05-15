@@ -1,92 +1,39 @@
 # -*- coding:UTF-8 -*-
-from django.shortcuts import *
-from django.template import RequestContext
-from django.http import HttpResponse
+if __name__ == "__main__":
+    print "main"
+else:
+    from django.shortcuts import *
+    from django.template import RequestContext
+    from django.http import HttpResponse
+    from django.utils import simplejson
+    from django.contrib import auth
+    from django import forms
+    from django.contrib.auth.forms import UserCreationForm
+    from django.contrib.auth.models import User
+    from django.contrib.auth import authenticate
+    from Server.models import Profile
+    from django.contrib.auth import login as auth_login
 import urllib
 import urllib2
 
-from Server.models import Profile
 from BeautifulSoup import BeautifulSoup
 import re
 from xml.sax import make_parser
 from xml.sax import parseString
 from xml.sax.handler import ContentHandler
 from xml.sax.saxutils import unescape
-import cStringIO
 
-from django.utils import simplejson
-from django.contrib import auth
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth import login as auth_login
-
-hostLibrary = "http://162.105.138.200"
-patternQuickSearch = re.compile(u"""form name="searchform" method="post" action="(.+)" onsubmit""")
-patternListResult = re.compile(u"(\<li\>[^\.]+Dynamic content lookup(.|\n)+\</li\>)(.|\n)+navigation")
-ptReplace = re.compile(u"\<script(.|\n)+?\</script\>")
-
-urlLibrary = "http://162.105.138.200/uhtbin/cgisirsi/0/0/0/49"
 
 def quickSearch(request):
-	listBook = list()
-	if request.method =='GET':
-		page = request.GET.get('page','1')
-		query = request.GET.get('q','')
-		
-		request = urllib2.Request(urlLibrary)
-		response = urllib2.urlopen(request)
-		string = response.read()
-		match = patternQuickSearch.search(string)
-		stringQS =  match.group(1)
-		
-		data = {}
-		data['searchdata1'] = query.encode('utf8')
-		data['search_type'] = 'search'
-		data['library'] = 'ALL'
+    import library_parser
+    page = request.POST.get('page','1')
+    query = request.POST.get('q','')
+    dom = library_parser.quickSearch({'page':page,'q':query})
+    result = library_parser.parseDOM(dom)
+    
 
-		urlQS = hostLibrary + stringQS
-
-		values = urllib.urlencode(data)
-		request = urllib2.Request(urlQS,values)
-		response = urllib2.urlopen(request)
-		string =  response.read()
-		##filehandler = open('C:/Users/wuhaotian/Desktop/test.htm')
-		##string = filehandler.read()
-		##filehandler.close()
-
-		matchList = patternListResult.search(string)
-		string = matchList.group(1)
-		string = ptReplace.sub('',string)
-		#string = BeautifulSoup(string).prettify()
-		#string = unescape(string,{'&nbsp;':''})
-
-
-		
-		string = """<?xml version="1.0"?>
-		<!DOCTYPE note [
-		  <!ELEMENT note (ul,li,a,div,script)>
-		  <!ELEMENT ul      (#PCDATA)>
-		  <!ELEMENT li    (#PCDATA)>
-		  <!ELEMENT a (#PCDATA)>
-		  <!ELEMENT div    (#PCDATA)>
-		  <!ELEMENT dd    (#PCDATA)>
-		  <!ELEMENT span    (#PCDATA)>
-		  <!ELEMENT input    (#PCDATA)>
-		  <!ELEMENT dt    (#PCDATA)>
-		  <!ENTITY squot "squot">
-		  <!ENTITY quot "quot">
-		  <!ENTITY nbsp "nbsp">
-		]>""" + string
-		stream = cStringIO.StringIO(string)
-		parser = make_parser()
-		handler = ResultHandler(listBook)
-		parser.setContentHandler(handler)
-		parser.parse(stream)
-		
-	return	HttpResponse(simplejson.dumps(listBook),mimetype='application/json')
-		
+    return  HttpResponse(simplejson.dumps(result),mimetype='application/json')
+        
 class ResultHandler(ContentHandler):
         def __init__(self,listBook):
                 self.isNewItem, self.isTitle,self.isAuthor,self.isTime,self.isHolding = 0,0,0,0,0
