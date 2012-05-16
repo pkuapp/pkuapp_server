@@ -1,4 +1,4 @@
-#! python
+
 # -*- coding:UTF-8 -*-
 import urllib,urllib2
 import re
