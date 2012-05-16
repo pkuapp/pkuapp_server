@@ -30,6 +30,7 @@ urlpatterns = patterns('Server.views',
 
 	               (r'^login_portal$','login_portal'),
 	               (r'^index$','index'),
+	               (r'^activity/',include('Server.activity.urls')),
 	               (r'^course/',include('Server.course.urls')),
 	               (r'^app/',include('Server.app.urls')),
 	               (r'^manage/',include('Server.manage.urls')),
