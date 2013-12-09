@@ -17,4 +17,5 @@ def getWeekNumber():
         return -1
     
 def getTermNumber():
-    return 4
+    '''modify on late 2013'''
+    return 5
