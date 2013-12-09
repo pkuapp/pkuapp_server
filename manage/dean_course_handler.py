@@ -110,7 +110,7 @@ def _handleCourseFromTable(string,xq,SchoolCode = ''):
     soup_course = BeautifulSoup(string,parseOnlyThese=strainer,fromEncoding = 'GBK')
     tbody = soup_course.table
     if tbody is None:
-        return '-1'
+        return string
     for i,tr in enumerate(tbody):
         if tr != None:
             if i > 0:
@@ -164,7 +164,7 @@ def _handleCourseFromTable2(string,xq,SchoolCode = None):
     soup_course=BeautifulSoup(string,parseOnlyThese=strainer,fromEncoding="GBK")
     tbody=soup_course.table
     if tbody is None:
-        return '-1'
+        return '-2'
     for i,tr in enumerate(tbody):
         if tr != None:
             if i > 0:

@@ -1,0 +1,7 @@
+uwsgi:
+    socket: /tmp/Server.sock
+    master: 1
+    workers: 2
+    pythonpath: ..
+    chdir: /Users/wuhaotian/Sites/Server/
+    wsgi-file: django.wsgi

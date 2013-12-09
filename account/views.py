@@ -55,7 +55,7 @@ def handle_notice(request):
 		obj_list=user.notice_set.filter(state=False)
 		value_list = list(obj_list.values())
 		result_dict = {}
-		result_dict['v'] = "0.632"
+		result_dict['v'] = "0.65"
 			
 		#map((lambda obj:obj.getnotice().setdefault('content',obj.getnotice())),obj_list)
 		#result_dict['c'] = list(value_list)

@@ -7,14 +7,14 @@ from django.views.decorators.http import require_http_methods
 from django.forms.models import model_to_dict
 
 def getpkutime(request):
-	return HttpResponse('2012/2/13')
+	return HttpResponse('2013/2/25')
 
 def get_pku_end_time(request):
 
-    return HttpResponse('2012/6/10')
+    return HttpResponse('2013/6/30')
 
 def getServerStatus(request):
-	return HttpResponse(simplejson.dumps({'status':0,'date_start':'2012/2/13','date_end':'2012/6/10'}),mimetype='application/json')
+	return HttpResponse(simplejson.dumps({'status':0,'date_start':'2012/2/25','date_end':'2013/6/30'}),mimetype='application/json')
 
 def get_sys_notice(request):
 	cid = request.POST.get('id',None)
@@ -22,7 +22,7 @@ def get_sys_notice(request):
 	return HttpResponse(simplejson.dumps(model_to_dict(cnotice)),mimetype='application/json')
 
 def Android_version(request):
-	return HttpResponse(simplejson.dumps({'v':"0.632"}),mimetype='application/json')
+	return HttpResponse(simplejson.dumps({'v':"0.65"}),mimetype='application/json')
 
 def iOS_version(request):
     return HttpResponse(simplejson.dumps({'beta':90}),mimetype='application/json')
